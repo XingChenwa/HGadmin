@@ -155,7 +155,7 @@ export default {
     const { frontmatter } = useData()
     // giscus配置
     giscusTalk({
-      repo: 'XingChenwa/HGadmin-v3', //仓库
+      repo: 'XingChenwa/HGadmin', //仓库
       repoId: 'R_kgDOQ2rcmg', //仓库ID
       category: 'Announcements', // 讨论分类
       categoryId: 'DIC_kwDOQ2rcms4C0wik', //讨论分类ID

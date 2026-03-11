@@ -83,6 +83,6 @@
 <NCard title='<i class="fa-regular fa-comment-dots fa-bounce" style="color: #FFB805;"></i> 底部发表评论' >
 在每个功能页面的的底部通过 GitHub 登录后可发表对应功能的建议和反馈
 </NCard>
-<NCard title='<i class="fa-solid fa-envelope fa-shake" style="color: #FFB805;"></i> 通过 GitHub issue' link="https://github.com/XingChenwa/HGadmin-v3/issues/new/choose" >
+<NCard title='<i class="fa-solid fa-envelope fa-shake" style="color: #FFB805;"></i> 通过 GitHub issue' link="https://github.com/XingChenwa/HGadmin/issues/new/choose" >
 也可以给通过创建新的 GitHub issue 工单
 </NCard>

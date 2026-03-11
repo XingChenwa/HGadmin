@@ -43,7 +43,7 @@ export default
   withPwa(defineConfig({
     pwa,
     lang: 'zh-CN',
-    title: 'HGadmin-v3/H&G管理员菜单',
+    title: 'HGadmin/H&G管理员菜单',
     titleTemplate: 'Fivem 的插件',
     description: 'Fivem 的插件',
     markdown: {
@@ -92,7 +92,7 @@ export default
         GitChangelog({
           maxGitLogCount: 2000,
           // 要获取git日志的仓库
-          repoURL: () => 'https://github.com/XingChenwa/HGadmin-v3',
+          repoURL: () => 'https://github.com/XingChenwa/HGadmin',
         }),
         GitChangelogMarkdownSection({
           exclude: (id) => id.endsWith('index.md'),
@@ -148,14 +148,14 @@ export default
       },
     },
     cleanUrls: true,
-    base: '/HGadmin-v3/',
+    base: '/HGadmin/',
     lastUpdated: true,
     // 站点地图
     sitemap: {
-      hostname: 'https://XingChenwa.github.io/HGadmin-v3/',
+      hostname: 'https://XingChenwa.github.io/HGadmin/',
     },
     head: [
-      ['link', { rel: 'icon', href: '/HGadmin-v3/logo.png' }], //部署到vitepress仓库
+      ['link', { rel: 'icon', href: '/HGadmin/logo.png' }], //部署到vitepress仓库
     ],
     themeConfig: {
       logo: {
@@ -165,7 +165,7 @@ export default
       // 手机端深浅模式文字修改
       darkModeSwitchLabel: '深浅模式',
       editLink: {
-        pattern: 'https://github.com/XingChenwa/HGadmin-v3/edit/docs/:path',
+        pattern: 'https://github.com/XingChenwa/HGadmin/edit/docs/:path',
         text: '在 GitHub 上编辑此页面',
       },
       nav: nav as DefaultTheme.NavItem[],
@@ -194,7 +194,7 @@ export default
       },
       sidebar: sidebar,
       socialLinks: [
-        { icon: { svg: '<i class="fa-brands fa-github fa-fade fa-lg"></i>' }, link: 'https://github.com/XingChenwa/HGadmin-v3' },
+        { icon: { svg: '<i class="fa-brands fa-github fa-fade fa-lg"></i>' }, link: 'https://github.com/XingChenwa/HGadmin' },
       ],
       lastUpdatedText: '最后编辑于',
       outlineTitle: '本页大纲',

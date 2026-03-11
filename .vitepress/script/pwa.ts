@@ -10,8 +10,8 @@ const pwa: Partial<VitePWAOptions> = {
   includeAssets: fg.sync('**/*.{png,svg,gif,ico,txt}', { cwd: resolve(__dirname, '../../public') }),
   manifest: {
     id: "/",
-    name: 'HGadmin-v3',
-    short_name: 'HGadmin-v3',
+    name: 'HGadmin',
+    short_name: 'HGadmin',
     description: '适用于 ESX / QB 生态的插件',
     theme_color: "#ffffff",
     icons: [
