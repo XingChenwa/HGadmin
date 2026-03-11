@@ -43,7 +43,7 @@ export default
   withPwa(defineConfig({
     pwa,
     lang: 'zh-CN',
-    title: 'HGadmin-v3',
+    title: 'HGadmin-v3/H&G管理员菜单',
     titleTemplate: 'Fivem 的插件',
     description: 'Fivem 的插件',
     markdown: {
