@@ -1,8 +1,7 @@
 import DefaultTheme from 'vitepress/theme'
 import mediumZoom from 'medium-zoom'
-import { type Plugin, onMounted, watch, nextTick, h, computed } from 'vue'
+import { type Plugin, onMounted, watch, nextTick, h } from 'vue'
 import { useData, useRoute } from 'vitepress'
-import { useHead } from '@vueuse/head'
 import { Footer_Data } from '../data/fooertData'
 import 'vitepress-markdown-timeline/dist/theme/index.css'
 import './style/index.css'
@@ -149,27 +148,11 @@ export default {
     })
   },
 
-  /** 响应式图片缩放 + SEO 关键词 meta */
+  /** 响应式图片缩放 */
   setup () {
-    // 获取前言和路由
     const route = useRoute()
-    const { frontmatter, lang } = useData()
-
-    // 多语言关键词：优先 keywords_zh / keywords_en，否则用 keywords（供搜索引擎与站内搜索）
-    const keywordsContent = computed(() => {
-      const fm = frontmatter.value as Record<string, unknown>
-      if (!fm) return ''
-      const toStr = (v: unknown): string[] => {
-        if (Array.isArray(v)) return v.map(String)
-        if (typeof v === 'string') return v.split(',').map(s => s.trim()).filter(Boolean)
-        return []
-      }
-      const localeKey = lang.value === 'zh-CN' ? 'keywords_zh' : lang.value === 'en' ? 'keywords_en' : null
-      const list = (localeKey && fm[localeKey]) ? toStr(fm[localeKey]) : toStr(fm.keywords)
-      return list.length ? list.join(', ') : ''
-    })
-
-    useHead(() => (keywordsContent.value ? { meta: [{ name: 'keywords', content: keywordsContent.value }] } : {}))
+    const { frontmatter } = useData()
+    // 全站 SEO 关键词见 config.ts head；单页 frontmatter keywords 由 keywords-search 插件注入正文以支持站内搜索
     // giscus配置
     giscusTalk({
       repo: 'XingChenwa/HGadmin', //仓库
