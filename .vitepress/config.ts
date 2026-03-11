@@ -38,6 +38,8 @@ import { withPwa } from "@vite-pwa/vitepress"
 import { groupIconMdPlugin, groupIconVitePlugin } from 'vitepress-plugin-group-icons'
 // 懒加载模糊预览图
 import { UnlazyImages } from '@nolebase/markdown-it-unlazy-img'
+// 关键词：将 frontmatter keywords 注入正文以支持站内搜索 + 多语言
+import { keywordsSearchPlugin } from './script/keywords-search'
 
 export default
   withPwa(defineConfig({
@@ -84,6 +86,7 @@ export default
     },
     vite: {
       plugins: [
+        keywordsSearchPlugin(),
         Inspect(),
         ViteImageOptimizer(),
         // 缩略图模糊哈希生成
@@ -155,7 +158,8 @@ export default
       hostname: 'https://XingChenwa.github.io/HGadmin/',
     },
     head: [
-      ['link', { rel: 'icon', href: '/HGadmin/logo.png' }], //部署到vitepress仓库
+      ['link', { rel: 'icon', href: '/HGadmin/logo.png' }], // 部署到 vitepress 仓库
+      ['meta', { name: 'keywords', content: 'HGadmin, FiveM, FIVEM, CFX, CFX.re, CitizenFX, FiveM 服务器, FiveM 插件, FiveM 资源, FiveM 框架, FiveM 社区, fivem, fxserver, FiveM 脚本, FiveM 模组, FiveM 管理, GTA5 联机, GTA5 多人, 服务器管理, 开服, RP 服务器, 角色扮演, 联机服务器, ESX, ESX 框架, QBCore, QBCore 框架, ESX_CORE, ESX_core , esx_core, QBCore_CORE, QBCore_core, qbcore_core, qbcore_CORE, qbcore_CORE, qbcore_core, 管理员插件, Fivem管理员插件, Fivem管理面板, Fivem后台管理, Fivem玩家管理, Fivem在线监控, H&G' }],
     ],
     themeConfig: {
       logo: {
@@ -185,6 +189,22 @@ export default
                   footer: {
                     selectText: '选择',
                     navigateText: '切换'
+                  }
+                }
+              }
+            },
+            en: {
+              translations: {
+                button: {
+                  buttonText: 'Search',
+                  buttonAriaLabel: 'Search docs'
+                },
+                modal: {
+                  noResultsText: 'No results found',
+                  resetButtonTitle: 'Clear query',
+                  footer: {
+                    selectText: 'Select',
+                    navigateText: 'Navigate'
                   }
                 }
               }
