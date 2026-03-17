@@ -2,7 +2,7 @@
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
 hero:
-  name: 'Fivem H&GADMIN'
+  name: 'Fivem HGadmin'
   text: V3 Pro版
   textsuffix: 本
   tagline: ✨ 适用于 <a href='[https://yunzai-org.github.io/docs](https://docs.fivem.net/docs/)' target='_blank'>FIVEM</a> 生态

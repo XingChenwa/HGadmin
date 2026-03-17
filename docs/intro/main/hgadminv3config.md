@@ -320,12 +320,12 @@ local function DetectFuelSystem()
                 return exports[system]:GetFuel(1) ~= nil
             end)
             if status then
-                print("^2[H&GADMIN] 自动检测到" .. system .. "燃油系统^7")
+                print("^2[HGadmin] 自动检测到" .. system .. "燃油系统^7")
                 return system
             end
         end
     end
-    print("^3[H&GADMIN] 警告: 未检测到支持的燃油系统，使用原生系统^7")
+    print("^3[HGadmin] 警告: 未检测到支持的燃油系统，使用原生系统^7")
     return "native"
 end
 -- 燃油系统接口
@@ -442,19 +442,19 @@ local function DetectTimeWeatherSystem()
     }
     for _, system in ipairs(timeWeatherSystems) do
         if GetResourceState(system) == "started" then
-            print("^2[H&GADMIN] 自动检测到" .. system .. "时间天气系统^7")
+            print("^2[HGadmin] 自动检测到" .. system .. "时间天气系统^7")
             return system
         end
     end
     -- 根据框架选择默认系统
     if QBCore then
-        print("^3[H&GADMIN] 未检测到专用时间系统，使用QB默认系统^7")
+        print("^3[HGadmin] 未检测到专用时间系统，使用QB默认系统^7")
         return "qb-weathersync"
     elseif ESX then
-        print("^3[H&GADMIN] 未检测到专用时间系统，使用ESX默认系统^7")
+        print("^3[HGadmin] 未检测到专用时间系统，使用ESX默认系统^7")
         return "esx_weathersync"
     end
-    print("^1[H&GADMIN] 错误: 未检测到支持的时间天气系统^7")
+    print("^1[HGadmin] 错误: 未检测到支持的时间天气系统^7")
     return "none"
 end
 -- 时间天气系统接口
@@ -464,23 +464,23 @@ Config.TimeWeatherInterface = {
             -- cd_easytime 使用命令或事件来设置天气
             -- 由于文档没有提供直接的export，我们尝试使用常见的事件名称
             TriggerEvent('cd_easytime:updateWeather', weatherType)
-            print("^3[H&GADMIN] cd_easytime: 尝试设置天气为 " .. tostring(weatherType) .. "^7")
+            print("^3[HGadmin] cd_easytime: 尝试设置天气为 " .. tostring(weatherType) .. "^7")
         end,
         setTime = function(hour, minute)
             -- cd_easytime 使用命令或事件来设置时间
             -- 由于文档没有提供直接的export，我们尝试使用常见的事件名称
             TriggerEvent('cd_easytime:updateTime', hour, minute or 0)
-            print("^3[H&GADMIN] cd_easytime: 尝试设置时间为 " .. hour .. ":" .. (minute or 0) .. "^7")
+            print("^3[HGadmin] cd_easytime: 尝试设置时间为 " .. hour .. ":" .. (minute or 0) .. "^7")
         end,
         setTimeFreeze = function(freeze)
             -- cd_easytime 使用暂停同步来实现时间冻结
             -- 根据文档，可以通过PauseSync来控制
             if freeze then
                 TriggerEvent('cd_easytime:pauseSync')
-                print("^3[H&GADMIN] cd_easytime: 尝试暂停时间同步^7")
+                print("^3[HGadmin] cd_easytime: 尝试暂停时间同步^7")
             else
                 TriggerEvent('cd_easytime:resumeSync')
-                print("^3[H&GADMIN] cd_easytime: 尝试恢复时间同步^7")
+                print("^3[HGadmin] cd_easytime: 尝试恢复时间同步^7")
             end
         end,
         getTimeFreezeState = function()
@@ -491,7 +491,7 @@ Config.TimeWeatherInterface = {
             if success then
                 return pauseState
             else
-                print("^1[H&GADMIN] cd_easytime: 无法获取暂停状态^7")
+                print("^1[HGadmin] cd_easytime: 无法获取暂停状态^7")
                 return false
             end
         end,
@@ -503,7 +503,7 @@ Config.TimeWeatherInterface = {
             if success then
                 return data
             else
-                print("^1[H&GADMIN] cd_easytime: 无法获取数据^7")
+                print("^1[HGadmin] cd_easytime: 无法获取数据^7")
                 return nil
             end
         end
@@ -540,26 +540,26 @@ Config.TimeWeatherInterface = {
         setWeather = function(weatherType)
             -- vSync使用事件或命令系统
             TriggerEvent('vSync:updateWeather', weatherType)
-            print("^3[H&GADMIN] vSync: 尝试设置天气为 " .. tostring(weatherType) .. "^7")
+            print("^3[HGadmin] vSync: 尝试设置天气为 " .. tostring(weatherType) .. "^7")
         end,
         setTime = function(hour, minute)
             -- vSync使用事件系统
             TriggerEvent('vSync:updateTime', hour, minute or 0)
-            print("^3[H&GADMIN] vSync: 尝试设置时间为 " .. hour .. ":" .. (minute or 0) .. "^7")
+            print("^3[HGadmin] vSync: 尝试设置时间为 " .. hour .. ":" .. (minute or 0) .. "^7")
         end,
         setTimeFreeze = function(freeze)
             -- vSync的时间冻结
             if freeze then
                 TriggerEvent('vSync:freezeTime', true)
-                print("^3[H&GADMIN] vSync: 尝试冻结时间^7")
+                print("^3[HGadmin] vSync: 尝试冻结时间^7")
             else
                 TriggerEvent('vSync:freezeTime', false)
-                print("^3[H&GADMIN] vSync: 尝试解冻时间^7")
+                print("^3[HGadmin] vSync: 尝试解冻时间^7")
             end
         end,
         getTimeFreezeState = function()
             -- vSync没有直接的状态获取，返回false
-            print("^3[H&GADMIN] vSync: 无法获取时间冻结状态^7")
+            print("^3[HGadmin] vSync: 无法获取时间冻结状态^7")
             return false
         end
     },
@@ -567,17 +567,17 @@ Config.TimeWeatherInterface = {
         setWeather = function(weatherType)
             -- vSyncR (vSync Revamped) 使用改进的事件系统
             TriggerEvent('vSyncR:setWeather', weatherType)
-            print("^3[H&GADMIN] vSyncR: 尝试设置天气为 " .. tostring(weatherType) .. "^7")
+            print("^3[HGadmin] vSyncR: 尝试设置天气为 " .. tostring(weatherType) .. "^7")
         end,
         setTime = function(hour, minute)
             -- vSyncR使用改进的时间设置
             TriggerEvent('vSyncR:setTime', hour, minute or 0)
-            print("^3[H&GADMIN] vSyncR: 尝试设置时间为 " .. hour .. ":" .. (minute or 0) .. "^7")
+            print("^3[HGadmin] vSyncR: 尝试设置时间为 " .. hour .. ":" .. (minute or 0) .. "^7")
         end,
         setTimeFreeze = function(freeze)
             -- vSyncR的时间冻结功能
             TriggerEvent('vSyncR:freezeTime', freeze)
-            print("^3[H&GADMIN] vSyncR: 尝试" .. (freeze and "冻结" or "解冻") .. "时间^7")
+            print("^3[HGadmin] vSyncR: 尝试" .. (freeze and "冻结" or "解冻") .. "时间^7")
         end,
         getTimeFreezeState = function()
             -- 尝试获取vSyncR状态
@@ -587,7 +587,7 @@ Config.TimeWeatherInterface = {
             if success then
                 return state
             else
-                print("^3[H&GADMIN] vSyncR: 无法获取时间冻结状态^7")
+                print("^3[HGadmin] vSyncR: 无法获取时间冻结状态^7")
                 return false
             end
         end
@@ -596,17 +596,17 @@ Config.TimeWeatherInterface = {
         setWeather = function(weatherType)
             -- ServerSync使用自己的事件系统
             TriggerEvent('ServerSync:setWeather', weatherType)
-            print("^3[H&GADMIN] ServerSync: 尝试设置天气为 " .. tostring(weatherType) .. "^7")
+            print("^3[HGadmin] ServerSync: 尝试设置天气为 " .. tostring(weatherType) .. "^7")
         end,
         setTime = function(hour, minute)
             -- ServerSync时间设置
             TriggerEvent('ServerSync:setTime', hour, minute or 0)
-            print("^3[H&GADMIN] ServerSync: 尝试设置时间为 " .. hour .. ":" .. (minute or 0) .. "^7")
+            print("^3[HGadmin] ServerSync: 尝试设置时间为 " .. hour .. ":" .. (minute or 0) .. "^7")
         end,
         setTimeFreeze = function(freeze)
             -- ServerSync时间冻结
             TriggerEvent('ServerSync:freezeTime', freeze)
-            print("^3[H&GADMIN] ServerSync: 尝试" .. (freeze and "冻结" or "解冻") .. "时间^7")
+            print("^3[HGadmin] ServerSync: 尝试" .. (freeze and "冻结" or "解冻") .. "时间^7")
         end,
         getTimeFreezeState = function()
             -- 尝试获取ServerSync状态
@@ -616,7 +616,7 @@ Config.TimeWeatherInterface = {
             if success then
                 return state
             else
-                print("^3[H&GADMIN] ServerSync: 无法获取时间冻结状态^7")
+                print("^3[HGadmin] ServerSync: 无法获取时间冻结状态^7")
                 return false
             end
         end
@@ -625,17 +625,17 @@ Config.TimeWeatherInterface = {
         setWeather = function(weatherType)
             -- Cx-RealSync-Reborn 真实天气系统
             TriggerEvent('Cx-RealSync:setWeather', weatherType)
-            print("^3[H&GADMIN] Cx-RealSync-Reborn: 尝试设置天气为 " .. tostring(weatherType) .. "^7")
+            print("^3[HGadmin] Cx-RealSync-Reborn: 尝试设置天气为 " .. tostring(weatherType) .. "^7")
         end,
         setTime = function(hour, minute)
             -- Cx-RealSync时间设置
             TriggerEvent('Cx-RealSync:setTime', hour, minute or 0)
-            print("^3[H&GADMIN] Cx-RealSync-Reborn: 尝试设置时间为 " .. hour .. ":" .. (minute or 0) .. "^7")
+            print("^3[HGadmin] Cx-RealSync-Reborn: 尝试设置时间为 " .. hour .. ":" .. (minute or 0) .. "^7")
         end,
         setTimeFreeze = function(freeze)
             -- Cx-RealSync时间冻结
             TriggerEvent('Cx-RealSync:freezeTime', freeze)
-            print("^3[H&GADMIN] Cx-RealSync-Reborn: 尝试" .. (freeze and "冻结" or "解冻") .. "时间^7")
+            print("^3[HGadmin] Cx-RealSync-Reborn: 尝试" .. (freeze and "冻结" or "解冻") .. "时间^7")
         end,
         getTimeFreezeState = function()
             -- 尝试获取Cx-RealSync状态
@@ -645,7 +645,7 @@ Config.TimeWeatherInterface = {
             if success then
                 return state
             else
-                print("^3[H&GADMIN] Cx-RealSync-Reborn: 无法获取时间冻结状态^7")
+                print("^3[HGadmin] Cx-RealSync-Reborn: 无法获取时间冻结状态^7")
                 return false
             end
         end
@@ -667,7 +667,7 @@ Config.TimeWeatherInterface = {
             if success then
                 return state
             else
-                print("^1[H&GADMIN] av_weather: 无法获取时间冻结状态^7")
+                print("^1[HGadmin] av_weather: 无法获取时间冻结状态^7")
                 return false
             end
         end
@@ -676,47 +676,47 @@ Config.TimeWeatherInterface = {
         setWeather = function(weatherType)
             -- 使用 b2_weatherEssentials 的 SetWeather 导出函数
             exports['b2_weatherEssentials']:SetWeather(weatherType)
-            print("^3[H&GADMIN] b2_weatherEssentials: 设置天气为 " .. tostring(weatherType) .. "^7")
+            print("^3[HGadmin] b2_weatherEssentials: 设置天气为 " .. tostring(weatherType) .. "^7")
         end,
         setTime = function(hour, minute)
             -- b2_weatherEssentials 没有直接的时间设置导出函数
             -- 尝试使用事件或命令
             TriggerEvent('b2_weatherEssentials:setTime', hour, minute or 0)
-            print("^3[H&GADMIN] b2_weatherEssentials: 尝试设置时间为 " .. hour .. ":" .. (minute or 0) .. "^7")
+            print("^3[HGadmin] b2_weatherEssentials: 尝试设置时间为 " .. hour .. ":" .. (minute or 0) .. "^7")
         end,
         setTimeFreeze = function(freeze)
             -- 根据文档，b2_weatherEssentials 有时间同步控制功能
             if freeze then
                 exports['b2_weatherEssentials']:DisableTimeSync()
-                print("^3[H&GADMIN] b2_weatherEssentials: 禁用时间同步^7")
+                print("^3[HGadmin] b2_weatherEssentials: 禁用时间同步^7")
             else
                 exports['b2_weatherEssentials']:EnableTimeSync()
-                print("^3[H&GADMIN] b2_weatherEssentials: 启用时间同步^7")
+                print("^3[HGadmin] b2_weatherEssentials: 启用时间同步^7")
             end
         end,
         setWeatherFreeze = function(freeze)
             -- 根据文档，b2_weatherEssentials 有天气同步控制功能
             if freeze then
                 exports['b2_weatherEssentials']:DisableWeatherSync()
-                print("^3[H&GADMIN] b2_weatherEssentials: 禁用天气同步^7")
+                print("^3[HGadmin] b2_weatherEssentials: 禁用天气同步^7")
             else
                 exports['b2_weatherEssentials']:EnableWeatherSync()
-                print("^3[H&GADMIN] b2_weatherEssentials: 启用天气同步^7")
+                print("^3[HGadmin] b2_weatherEssentials: 启用天气同步^7")
             end
         end,
         toggleBlackout = function(state)
             -- 根据文档，b2_weatherEssentials 有停电功能
             if state then
                 exports['b2_weatherEssentials']:TriggerBlackout()
-                print("^3[H&GADMIN] b2_weatherEssentials: 启用停电^7")
+                print("^3[HGadmin] b2_weatherEssentials: 启用停电^7")
             else
                 exports['b2_weatherEssentials']:ClearBlackout()
-                print("^3[H&GADMIN] b2_weatherEssentials: 禁用停电^7")
+                print("^3[HGadmin] b2_weatherEssentials: 禁用停电^7")
             end
         end,
         getTimeFreezeState = function()
             -- b2_weatherEssentials 没有直接的状态获取函数
-            print("^3[H&GADMIN] b2_weatherEssentials: 无法直接获取时间冻结状态^7")
+            print("^3[HGadmin] b2_weatherEssentials: 无法直接获取时间冻结状态^7")
             return false
         end,
         getWeatherState = function()
@@ -727,7 +727,7 @@ Config.TimeWeatherInterface = {
             if success then
                 return weather
             else
-                print("^3[H&GADMIN] b2_weatherEssentials: 无法获取当前天气^7")
+                print("^3[HGadmin] b2_weatherEssentials: 无法获取当前天气^7")
                 return "UNKNOWN"
             end
         end,
@@ -739,7 +739,7 @@ Config.TimeWeatherInterface = {
             if success then
                 return extremeWeather
             else
-                print("^3[H&GADMIN] b2_weatherEssentials: 无法获取极端天气状态^7")
+                print("^3[HGadmin] b2_weatherEssentials: 无法获取极端天气状态^7")
                 return false
             end
         end
@@ -750,16 +750,16 @@ Config.GetTimeWeatherSystem = function()
     local detectedSystem = DetectTimeWeatherSystem()
     return Config.TimeWeatherInterface[detectedSystem] or {
         setWeather = function(weatherType)
-            print("^1[H&GADMIN] 错误: 未找到可用的时间天气系统接口^7")
+            print("^1[HGadmin] 错误: 未找到可用的时间天气系统接口^7")
         end,
         setTime = function(hour, minute)
-            print("^1[H&GADMIN] 错误: 未找到可用的时间天气系统接口^7")
+            print("^1[HGadmin] 错误: 未找到可用的时间天气系统接口^7")
         end,
         setTimeFreeze = function(freeze)
-            print("^1[H&GADMIN] 错误: 未找到可用的时间天气系统接口^7")
+            print("^1[HGadmin] 错误: 未找到可用的时间天气系统接口^7")
         end,
         getTimeFreezeState = function()
-            print("^1[H&GADMIN] 错误: 未找到可用的时间天气系统接口^7")
+            print("^1[HGadmin] 错误: 未找到可用的时间天气系统接口^7")
             return false
         end
     }
