@@ -53,7 +53,7 @@ Config.TeleportActions["sendtomyplace"] = {
 ```
 
 #### 步骤 3: 更新前端按钮
-在 `HGADMINUI/dist/setting.js` 中添加：
+在 `HGadmin-v3UI/dist/setting.js` 中添加：
 ```javascript
 {
     name: 'management.player_info.config.myplace',
@@ -80,7 +80,7 @@ Config.TeleportActions["sendtomyplace"] = {
 ### 常见问题:
 
 1. **传送按钮不显示**
-   - 检查 `HGADMINUI/dist/setting.js` 是否添加了按钮配置
+   - 检查 `HGadmin-v3UI/dist/setting.js` 是否添加了按钮配置
    - 确认 `Config.TeleportActions` 中有对应的操作配置
 
 2. **传送失败**

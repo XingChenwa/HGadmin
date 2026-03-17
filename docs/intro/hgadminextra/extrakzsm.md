@@ -13,7 +13,7 @@
  我们的官方文档
 
 
-您的账号在哪里 修改？  请您 前往 我们的 `hgadmin_extra\server\xiaoha.lua` 进行 配置 账户相关权限事宜 
+您的账号在哪里 修改？  请您 前往 我们的 `HGadmin-v3_extra\server\xiaoha.lua` 进行 配置 账户相关权限事宜 
 
 ::: details config.lua配置配置文件
 ```lua
@@ -518,7 +518,7 @@ xiaoha.Admins = {
 -- 根据 token 获取管理员信息
 function xiaoha.GetAdminByToken(token)
     for k, v in pairs(xiaoha.Admins) do
-        local adminToken = exports['hgadmin_extra']:GetMd(v.username.."h&g&a&d&m&i&n"..v.password)
+        local adminToken = exports['HGadmin-v3_extra']:GetMd(v.username.."h&g&a&d&m&i&n"..v.password)
         if adminToken == token then
             return {
                 id = k,
@@ -638,14 +638,14 @@ exports("GetRoleInfo", xiaoha.GetRoleInfo)
 
 ```lua
 -- 白名单配置
--- ⚠️ 注意：如果 hgadmin 资源已启动，白名单开关将从 hgadmin 的「Kook日志配置」页面读取
+-- ⚠️ 注意：如果 HGadmin-v3 资源已启动，白名单开关将从 HGadmin-v3 的「Kook日志配置」页面读取
 -- 在管理面板中的「Kook日志配置」->「白名单功能」中可以配置：
 --   - 是否启用白名单
 --   - KOOK 审核频道（打勾过白）
 --   - 表情配置、命令过白、私信通知等
--- 此处的配置仅作为回退选项（当 hgadmin 未安装或未启用时使用）
+-- 此处的配置仅作为回退选项（当 HGadmin-v3 未安装或未启用时使用）
 -- ============================================
-Config.EnableWhiteList = false -- 是否开启白名单（建议在 hgadmin 管理面板中配置） 在游戏内 进行配置  这里默认为false 即可
+Config.EnableWhiteList = false -- 是否开启白名单（建议在 HGadmin-v3 管理面板中配置） 在游戏内 进行配置  这里默认为false 即可
 ```
 
 

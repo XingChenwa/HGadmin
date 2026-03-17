@@ -1,4 +1,4 @@
-# hgadmin V3 pro 配置文件相关
+# HGadmin-v3 V3 pro 配置文件相关
 
 ### Config.lua配置说明
 ::: details Config.lua配置文件
@@ -88,11 +88,11 @@ Config.JointBan = {
     -- 白名单设置
     Whitelist = {
         Enabled = true,                                            -- 是否启用联ban白名单功能
-        CommandPrefix = "hgadmin",                                 -- 白名单命令前缀
+        CommandPrefix = "HGadmin-v3",                                 -- 白名单命令前缀
         Commands = {
-            AddToWhitelist = "jieban",                             -- 添加到白名单的命令 (例如：/hgadminjieban)
-            RemoveFromWhitelist = "deljieban",                     -- 从白名单移除的命令 (例如：/hgadmindeljieban)
-            ListWhitelist = "jiebanlist"                           -- 列出白名单的命令 (例如：/hgadminjiebanlist)
+            AddToWhitelist = "jieban",                             -- 添加到白名单的命令 (例如：/HGadmin-v3jieban)
+            RemoveFromWhitelist = "deljieban",                     -- 从白名单移除的命令 (例如：/HGadmin-v3deljieban)
+            ListWhitelist = "jiebanlist"                           -- 列出白名单的命令 (例如：/HGadmin-v3jiebanlist)
         },
         NotifyAdmins = true                                        -- 当添加或移除白名单时通知所有管理员
     }
@@ -123,10 +123,10 @@ Config.AdminWhitelist = {
 	-- "license:1234567890abcdef1234567890abcdef",
 }
 -- 管理员 ACE 权限组（服务端 server.cfg 中 add_ace 配置的权限），任意一个命中即视为管理员
--- 例如：add_ace group.admin hgadmin.adminmenu allow
+-- 例如：add_ace group.admin HGadmin-v3.adminmenu allow
 Config.AdminAcePerms = {
-	"hgadmin.adminmenu",
-	"command.hgadmin",
+	"HGadmin-v3.adminmenu",
+	"command.HGadmin-v3",
 }
 -- ============================================
 -- 超级管理员配置（拥有所有权限，可在游戏中管理其他管理员）
@@ -144,7 +144,7 @@ Config.SuperAdmins = {
 -- 是否启用数据库权限系统（员工管理功能）
 -- Enable database permission system (staff management feature)
 Config.EnableStaffSystem = true
------        add_ace group.admin hgadmin.adminmenu allow  添加管理员权限ace权限
+-----        add_ace group.admin HGadmin-v3.adminmenu allow  添加管理员权限ace权限
 -- 结束观战   stopspectate
 Config.StopSpectateCommand = "stopspectate"
 Config.StopSpectateKey = 'X'
@@ -278,9 +278,9 @@ Config.SecurityMonitor = {
     SubmitJointBan = true,     -- 是否提交联合封禁
     DropPlayer = true,         -- 是否直接踢出玩家
     Modules = {
-        CheckProtectedEvent = true,  -- 监听 hgadmin:server:CheckProtectedEvent
-        CheckPlayerMode = true,      -- 监听 hgadmin:server:CheckPlayerMode
-        CheckTeleport = true,        -- 监听 hgadmin:server:CheckTeleport
+        CheckProtectedEvent = true,  -- 监听 HGadmin-v3:server:CheckProtectedEvent
+        CheckPlayerMode = true,      -- 监听 HGadmin-v3:server:CheckPlayerMode
+        CheckTeleport = true,        -- 监听 HGadmin-v3:server:CheckTeleport
         GuardServerEvents = true,    -- 保护 protectedServerEvents 列表内事件
         TxSetPlayerMode = true,      -- 保护 txcl:setPlayerMode（服务器端）
         TxTpToWaypoint = true,       -- 保护 txcl:tpToWaypoint（服务器端）
@@ -948,7 +948,7 @@ Config.Permissions = {
 
 function DebugTrace(message)
     if Config.EnableDebug then
-        print("^3[HGADMIN] ("..GetCurrentResourceName()..")]^7 "..message)
+        print("^3[HGadmin-v3] ("..GetCurrentResourceName()..")]^7 "..message)
     end
 end
 function print_table(node)
@@ -1275,10 +1275,10 @@ Config.HandleTeleportAction = function(action, currentPlayer)
         return false, "传送位置坐标无效"
     end
     -- 触发服务器事件进行传送
-    TriggerServerEvent("hgadmin:server:SetPosition", currentPlayer, coords.x, coords.y, coords.z)
+    TriggerServerEvent("HGadmin-v3:server:SetPosition", currentPlayer, coords.x, coords.y, coords.z)
     -- 显示成功提示
     if teleportConfig.alertKey then
-        TriggerEvent("hgadmin:client:ShowPanelAlert", "success", 
+        TriggerEvent("HGadmin-v3:client:ShowPanelAlert", "success", 
             "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts."..teleportConfig.alertKey))
     end
     return true, "传送成功"

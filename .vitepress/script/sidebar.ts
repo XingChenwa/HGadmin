@@ -10,15 +10,15 @@ const sidebar = [
     text: '功能',
     items: [
       {
-        text: '<i class="fa-solid fa-bars fa-flip"></i> HGadmin v3说明', link: '/docs/intro/main/main', items: [
-          { text: '<i class="fa-solid fa-gear fa-spin"></i> 配置文件', link: '/docs/intro/main/hgadminv3config', },
+        text: '<i class="fa-solid fa-bars fa-flip"></i> HGadmin-v3 v3说明', link: '/docs/intro/main/main', items: [
+          { text: '<i class="fa-solid fa-gear fa-spin"></i> 配置文件', link: '/docs/intro/main/HGadmin-v3v3config', },
           { text: '<i class="fa-brands fa-modx fa-fade"></i> 模块化传送系统相关', link: '/docs/intro/main/csmk' },
         ]
       },
 
       {
-        text: '<i class="fa-solid fa-bars fa-flip"></i> hgadmin_extra说明', link: '/docs/intro/hgadminextra/main', items: [
-          { text: '<i class="fa-solid fa-gear fa-spin"></i> 扩展说明', link: '/docs/intro/hgadminextra/extrakzsm', },
+        text: '<i class="fa-solid fa-bars fa-flip"></i> HGadmin-v3_extra说明', link: '/docs/intro/HGadmin-v3extra/main', items: [
+          { text: '<i class="fa-solid fa-gear fa-spin"></i> 扩展说明', link: '/docs/intro/HGadmin-v3extra/extrakzsm', },
         ]
       },
       { text: '<i class="fa-solid fa-server fa-fade"></i> API Server', link: '/docs/intro/apiserver' },

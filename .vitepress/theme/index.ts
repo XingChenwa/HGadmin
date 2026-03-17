@@ -155,7 +155,7 @@ export default {
     // 全站 SEO 关键词见 config.ts head；单页 frontmatter keywords 由 keywords-search 插件注入正文以支持站内搜索
     // giscus配置
     giscusTalk({
-      repo: 'XingChenwa/HGadmin', //仓库
+      repo: 'XingChenwa/HGadmin-v3', //仓库
       repoId: 'R_kgDOQ2rcmg', //仓库ID
       category: 'Announcements', // 讨论分类
       categoryId: 'DIC_kwDOQ2rcms4C0wik', //讨论分类ID

@@ -45,7 +45,7 @@ export default
   withPwa(defineConfig({
     pwa,
     lang: 'zh-CN',
-    title: 'HGadmin/H&G管理员菜单',
+    title: 'HGadmin-v3/H&G管理员菜单',
     titleTemplate: 'Fivem 的插件',
     description: 'Fivem 的插件',
     markdown: {
@@ -95,7 +95,7 @@ export default
         GitChangelog({
           maxGitLogCount: 2000,
           // 要获取git日志的仓库
-          repoURL: () => 'https://github.com/XingChenwa/HGadmin',
+          repoURL: () => 'https://github.com/XingChenwa/HGadmin-v3',
         }),
         GitChangelogMarkdownSection({
           exclude: (id) => id.endsWith('index.md'),
@@ -151,15 +151,15 @@ export default
       },
     },
     cleanUrls: true,
-    base: '/HGadmin/',
+    base: '/HGadmin-v3/',
     lastUpdated: true,
     // 站点地图
     sitemap: {
-      hostname: 'https://XingChenwa.github.io/HGadmin/',
+      hostname: 'https://XingChenwa.github.io/HGadmin-v3/',
     },
     head: [
-      ['link', { rel: 'icon', href: '/HGadmin/logo.png' }], // 部署到 vitepress 仓库
-      ['meta', { name: 'keywords', content: 'HGadmin, FiveM, FIVEM, CFX, CFX.re, CitizenFX, FiveM 服务器, FiveM 插件, FiveM 资源, FiveM 框架, FiveM 社区, fivem, fxserver, FiveM 脚本, FiveM 模组, FiveM 管理, GTA5 联机, GTA5 多人, 服务器管理, 开服, RP 服务器, 角色扮演, 联机服务器, ESX, ESX 框架, QBCore, QBCore 框架, ESX_CORE, ESX_core , esx_core, QBCore_CORE, QBCore_core, qbcore_core, qbcore_CORE, qbcore_CORE, qbcore_core, 管理员插件, Fivem管理员插件, Fivem管理面板, Fivem后台管理, Fivem玩家管理, Fivem在线监控, H&G' }],
+      ['link', { rel: 'icon', href: '/HGadmin-v3/logo.png' }], // 部署到 vitepress 仓库
+      ['meta', { name: 'keywords', content: 'HGadmin-v3, FiveM, FIVEM, CFX, CFX.re, CitizenFX, FiveM 服务器, FiveM 插件, FiveM 资源, FiveM 框架, FiveM 社区, fivem, fxserver, FiveM 脚本, FiveM 模组, FiveM 管理, GTA5 联机, GTA5 多人, 服务器管理, 开服, RP 服务器, 角色扮演, 联机服务器, ESX, ESX 框架, QBCore, QBCore 框架, ESX_CORE, ESX_core , esx_core, QBCore_CORE, QBCore_core, qbcore_core, qbcore_CORE, qbcore_CORE, qbcore_core, 管理员插件, Fivem管理员插件, Fivem管理面板, Fivem后台管理, Fivem玩家管理, Fivem在线监控, H&G' }],
     ],
     themeConfig: {
       logo: {
@@ -169,7 +169,7 @@ export default
       // 手机端深浅模式文字修改
       darkModeSwitchLabel: '深浅模式',
       editLink: {
-        pattern: 'https://github.com/XingChenwa/HGadmin/edit/docs/:path',
+        pattern: 'https://github.com/XingChenwa/HGadmin-v3/edit/docs/:path',
         text: '在 GitHub 上编辑此页面',
       },
       nav: nav as DefaultTheme.NavItem[],
@@ -214,7 +214,7 @@ export default
       },
       sidebar: sidebar,
       socialLinks: [
-        { icon: { svg: '<i class="fa-brands fa-github fa-fade fa-lg"></i>' }, link: 'https://github.com/XingChenwa/HGadmin' },
+        { icon: { svg: '<i class="fa-brands fa-github fa-fade fa-lg"></i>' }, link: 'https://github.com/XingChenwa/HGadmin-v3' },
       ],
       lastUpdatedText: '最后编辑于',
       outlineTitle: '本页大纲',

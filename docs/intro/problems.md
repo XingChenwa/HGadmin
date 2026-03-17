@@ -2,15 +2,15 @@
 
 # 遇到问题了咋办
 
-> 任何事物都不可能尽善尽美，HGadmin v3 也是如此。
+> 任何事物都不可能尽善尽美，HGadmin-v3 v3 也是如此。
 
-如果你在使用 HGadmin v3 的过程中遇到了任何问题（包括但不限于如何配置ck、推送报错等），请认真阅读并充分理解下述内容，这会对你有帮助。
+如果你在使用 HGadmin-v3 v3 的过程中遇到了任何问题（包括但不限于如何配置ck、推送报错等），请认真阅读并充分理解下述内容，这会对你有帮助。
 
 ## 遇到问题后的第一反应
 
 <div align="center" style="line-height: 1.5em; font-size: 1.5em; padding: 2em 1em; margin: 2em 0; border: 1px solid var(--vp-c-text-1); border-radius: 8px">不要急，也不要慌，更不要气急败坏。</div>
 
-大部分情况下，HGadmin v3 是可以正常运行的。
+大部分情况下，HGadmin-v3 v3 是可以正常运行的。
 
 👉 所以在遇到问题时，你应该**检查一下是不是你自己的问题**，包括但不限于：网络错误、操作错误和用户配置错误。所以，<mark>在提问之前，请先以自己的经验判断一下，这是不是你自己的问题</mark>。
 
@@ -48,7 +48,7 @@
 
 ### 1. 报错截图 <Badge type="warning" text="控制台" /><Badge type="danger" text="必要" />
 
-如果是 HGadmin v3 的问题，发生错误时，HGadmin v3 应该会给出相应的提示。一般情况下都是红色的错误警告。
+如果是 HGadmin-v3 v3 的问题，发生错误时，HGadmin-v3 v3 应该会给出相应的提示。一般情况下都是红色的错误警告。
 <mark>**请把相关的提示乃至整个屏幕截图**，并在提问时提供。</mark>
 
 ### 2. 复现步骤 <Badge type="info">控制台</Badge><Badge type="info">核心</Badge><Badge type="info">用户配置</Badge><Badge type="info" text="……" />
@@ -83,6 +83,6 @@
 <NCard title='<i class="fa-regular fa-comment-dots fa-bounce" style="color: #FFB805;"></i> 底部发表评论' >
 在每个功能页面的的底部通过 GitHub 登录后可发表对应功能的建议和反馈
 </NCard>
-<NCard title='<i class="fa-solid fa-envelope fa-shake" style="color: #FFB805;"></i> 通过 GitHub issue' link="https://github.com/XingChenwa/HGadmin/issues/new/choose" >
+<NCard title='<i class="fa-solid fa-envelope fa-shake" style="color: #FFB805;"></i> 通过 GitHub issue' link="https://github.com/XingChenwa/HGadmin-v3/issues/new/choose" >
 也可以给通过创建新的 GitHub issue 工单
 </NCard>

@@ -11,8 +11,8 @@
 2. `qb-weathersync`
 3. `screenshot-basic`
 
-4. `hgadmin`     这个是单管理员 
-5. `hgadmin_extra`   这个是云管理 web 扩展 
+4. `HGadmin-v3`     这个是单管理员 
+5. `HGadmin-v3_extra`   这个是云管理 web 扩展 
 
 这以上都是 依赖项目 `weathersync` 是天气依赖  `screenshot-basic` 是用于截图的依赖  如果你本来 服务器上拥有了， 即可不用在安装  
 然后 我们将我们的依赖脚本  
@@ -41,7 +41,7 @@ start esx_weathersync
 以及 您需要在`server.cfg`添加一条指令  否则您的实时控制台 会无法输入命令 
 
 ```
-add_ace resource.hgadmin command allow
+add_ace resource.HGadmin-v3 command allow
 ```
 在 config.lua 中配置超级管理员，超级管理员拥有所有权限且无法被限制：
 ```lua
@@ -57,7 +57,7 @@ Config.SuperAdmins = {
 
 这里温馨提示， 切勿将 代码编辑器 的权限 交给您不可相信的管理员   否则后果自负  不要轻易给人上`superadmin` 权限， 这将是最高权限 可直接实时修改您的服务端代码 并保存， 如果保存后，您的代码将会被修改， 无法恢复 ！！！ 不要交给不信任的人 这个权限！！！
 
-然后 如 使用`qb`框架的  或者 `qs`库存的，这些将您的物品代码如果是写在`qbcore` 核心里面的 需 手动在  `hgadmin/config.lua`    将 默认的 `auto` 选择 为`qb` 即可 
+然后 如 使用`qb`框架的  或者 `qs`库存的，这些将您的物品代码如果是写在`qbcore` 核心里面的 需 手动在  `HGadmin-v3/config.lua`    将 默认的 `auto` 选择 为`qb` 即可 
 ```lua
 Config.Inventory = "auto" -- 可选值: "auto", "ox", "qs", "qb", "ps", "tgiann", "ms_inventory", "codem-inventory", "origen_inventory" -- 目前仅支持这些库存 qb库存的方式是获取qbcore的items.lua 的物品，
 
