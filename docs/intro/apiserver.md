@@ -225,6 +225,97 @@ CREATE TABLE IF NOT EXISTS `owned_vehicles` (
 );
 ```
 
+
+#### 全服补偿系统 (server/buchang.lua)
+
+全服补偿系统提供了一键向所有在线玩家发放金钱或物品的功能，支持 ESX 和 QBCore 双框架，自动适配 ox_inventory / qb-inventory 等主流背包系统。
+
+##### 命令接口
+
+命令名可通过 `Config.CompensationCommand` 自定义，默认为 `buchang`。
+
+```
+/buchang money|cash|bank <金额>       -- 给所有在线玩家发放金钱
+/buchang <物品名> [数量]               -- 给所有在线玩家发放物品（默认数量 1）
+```
+
+##### 用法示例
+
+```bash
+/buchang money 10000       # 给所有在线玩家现金 10000
+/buchang bank 50000        # 给所有在线玩家银行 50000
+/buchang cash 5000         # 给所有在线玩家现金 5000（同 money）
+/buchang water 2           # 给所有在线玩家物品 water x2
+/buchang bread             # 给所有在线玩家物品 bread x1
+```
+
+##### 权限要求
+
+| 权限来源 | 权限名 | 说明 |
+|---------|--------|------|
+| 控制台 | - | `source == 0` 时自动允许 |
+| AdminPanel | `givetakemoney` | 管理面板金钱权限 |
+| AdminPanel | `giveitem` | 管理面板物品权限 |
+
+##### 框架兼容性
+
+| 框架 | 金钱发放 | 物品发放 |
+|------|---------|---------|
+| **ESX** | `addAccountMoney('money'/'bank')` | `addInventoryItem()` |
+| **QBCore** | `AddMoney('cash'/'bank')` | `AddItem()` |
+| **QBX Core** | 同 QBCore | 同 QBCore |
+
+##### 物品发放优先级
+
+系统会按以下顺序尝试发放物品，使用第一个可用的背包系统：
+
+1. **ox_inventory** — `exports['ox_inventory']:AddItem()`
+2. **QBCore 内置** — `Player.Functions.AddItem()`
+3. **qb-inventory** — `exports['qb-inventory']:AddItem()`
+4. **ESX 内置** — `xPlayer.addInventoryItem()`
+
+##### 内部函数（可供二次开发参考）
+
+```lua
+-- 给所有在线玩家发放金钱
+-- kind: "money"/"cash"/"bank"
+-- amount: 金额
+-- 返回: 成功发放的人数
+local function giveAllMoney(kind, amount)
+
+-- 给所有在线玩家发放物品
+-- item: 物品名
+-- amount: 数量
+-- 返回: 成功发放的人数
+local function giveAllItem(item, amount)
+
+-- 给单个玩家发放物品（自动适配背包系统）
+-- playerId: 玩家服务器 ID
+-- item: 物品名
+-- amount: 数量
+-- 返回: true/false
+local function addItemPreferOX(playerId, item, amount)
+```
+
+##### 日志记录
+
+补偿操作会自动发送 Kook/Discord 日志：
+
+```lua
+-- 金钱补偿日志
+SendKookLog("GiveMoney", "💰 全服补偿金钱", 
+    "**管理员:** Admin\n**类型:** bank\n**金额:** 50000\n**受益人数:** 32",
+    nil, "success")
+
+-- 物品补偿日志
+SendKookLog("GiveItem", "📦 全服补偿物品", 
+    "**管理员:** Admin\n**物品:** water\n**数量:** 2\n**受益人数:** 32",
+    nil, "success")
+```
+
+> [!TIP] 提示
+> 此命令也可在服务器控制台中直接使用（source=0 时自动拥有权限），适合搭配定时任务做自动补偿。
+
 #### 联合封禁系统
 资源保护系统与联合封禁系统集成，可以自动提交违规者信息进行封禁。
 ```lua
