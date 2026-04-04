@@ -17,8 +17,9 @@ const sidebar = [
       },
 
       {
-        text: '<i class="fa-solid fa-bars fa-flip"></i> HGadmin-v3_extra说明', link: '/docs/intro/HGadmin-v3extra/main', items: [
-          { text: '<i class="fa-solid fa-gear fa-spin"></i> 扩展说明', link: '/docs/intro/HGadmin-v3extra/extrakzsm', },
+        text: '<i class="fa-solid fa-bars fa-flip"></i> HGadmin-v3_extra说明', link: '/docs/intro/hgadminextra/main', items: [
+          { text: '<i class="fa-solid fa-gear fa-spin"></i> 扩展说明', link: '/docs/intro/hgadminextra/extrakzsm', },
+          { text: '<i class="fa-solid fa-code fa-fade"></i> 白名单 HTTP API', link: '/docs/intro/hgadminextra/whitelist-api', },
         ]
       },
       { text: '<i class="fa-solid fa-server fa-fade"></i> API Server', link: '/docs/intro/apiserver' },
