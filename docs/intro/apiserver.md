@@ -106,6 +106,125 @@ local resourceMonitorConfig = {
    - 提交联合封禁
    - 踢出玩家
 
+#### 给车系统 (server/givecar.lua)
+
+给车系统提供了安全可靠的车辆赠送接口，内置权限验证和反作弊保护。其他资源可直接通过事件调用，无需自行处理权限和数据库写入。
+
+##### 服务端事件接口
+
+###### 1. 赠送车辆
+
+向指定玩家赠送一辆车。系统会自动验证管理员权限、生成安全令牌、写入数据库并通知玩家。
+
+```lua
+-- 事件名: esx_admin:giveVehicle
+-- 参数:
+--   targetId (number) - 目标玩家的服务器 ID
+--   carModel (string) - 车辆模型名 (如 "adder", "zentorno")
+--   plate    (string|nil) - 自定义车牌号，为 nil 则自动生成
+
+-- 调用示例：给 ID 为 1 的玩家一辆 adder，车牌 HGADMIN
+TriggerEvent('esx_admin:giveVehicle', 1, "adder", "HGADMIN")
+```
+
+> [!WARNING] 权限要求
+> 调用此事件的 `source` 必须是拥有管理员权限的玩家，否则会被安全系统拦截并记录。
+
+###### 2. 删除车牌
+
+从数据库中删除指定车牌的车辆记录。
+
+```lua
+-- 事件名: esx_admin:delCarPlate
+-- 参数:
+--   plate (string) - 要删除的车牌号
+
+-- 调用示例：删除车牌为 HGADMIN 的车辆
+TriggerEvent('esx_admin:delCarPlate', "HGADMIN")
+```
+
+###### 3. 写入车辆数据（内部事件）
+
+将车辆属性写入 `owned_vehicles` 数据库表，通常由客户端生成车辆后回调触发。
+
+```lua
+-- 事件名: esx_giveownedcar:setVehicle
+-- 参数:
+--   vehicleProps (table) - 车辆属性表，包含 model, plate 等字段
+--   playerID     (number) - 目标玩家 ID
+--   vehicleType  (string) - 车辆类型，默认 "car"
+
+-- 数据库写入格式:
+-- INSERT INTO owned_vehicles (owner, plate, vehicle, stored, type)
+```
+
+> [!CAUTION] 安全保护
+> 此事件内置反作弊机制。如果非管理员玩家尝试触发此事件，系统会：
+> - 记录安全违规日志
+> - 向全服管理员发送警告通知
+> - 自动提交联合封禁
+> - 踢出该玩家
+
+##### 权限检查函数
+
+```lua
+-- 检查玩家是否有给车权限
+-- 支持两种鉴权方式:
+--   1. ESX 权限组: Config.AuthorizedRanks 中配置的组 (admin, superadmin 等)
+--   2. ACE 权限: giveownedcar.command
+function havePermission(_source)
+    -- 返回 true/false
+end
+```
+
+##### 在其他资源中调用示例
+
+```lua
+-- 示例: 在你的脚本中给玩家赠送车辆
+-- 注意: source 必须是管理员，否则会触发反作弊
+
+-- 方式一: 通过事件触发 (需要管理员 source)
+RegisterCommand("mygivevehicle", function(source, args)
+    local targetId = tonumber(args[1])
+    local model = args[2] or "adder"
+    local plate = args[3] or nil
+    TriggerEvent('esx_admin:giveVehicle', targetId, model, plate)
+end, true) -- true = 仅限 ACE 授权
+
+-- 方式二: 直接写入数据库 (绕过权限检查，仅在服务端内部逻辑使用)
+-- 如果你需要在无玩家 source 的情况下给车（如奖励系统），
+-- 可以直接操作数据库:
+local function GiveVehicleDirect(playerIdentifier, model, plate, vehicleType)
+    MySQL.Async.execute([[
+        INSERT INTO owned_vehicles (owner, plate, vehicle, stored, type) 
+        VALUES (@owner, @plate, @vehicle, @stored, @type)
+    ]], {
+        ['@owner'] = playerIdentifier,  -- 玩家 identifier
+        ['@plate'] = string.upper(plate),
+        ['@vehicle'] = json.encode({model = joaat(model), plate = string.upper(plate)}),
+        ['@stored'] = 1,
+        ['@type'] = vehicleType or 'car'
+    }, function(rowsChanged)
+        if rowsChanged > 0 then
+            print("[GiveCar] 成功给 " .. playerIdentifier .. " 赠送车辆 " .. model)
+        end
+    end)
+end
+```
+
+##### 数据库表结构
+
+```sql
+-- owned_vehicles 表 (ESX 框架自带)
+CREATE TABLE IF NOT EXISTS `owned_vehicles` (
+    `owner`   VARCHAR(60)  DEFAULT NULL,     -- 玩家 identifier
+    `plate`   VARCHAR(12)  NOT NULL,         -- 车牌号
+    `vehicle` LONGTEXT     DEFAULT NULL,     -- 车辆属性 JSON
+    `stored`  TINYINT(1)   NOT NULL DEFAULT 0, -- 是否在车库
+    `type`    VARCHAR(20)  NOT NULL DEFAULT 'car' -- 车辆类型
+);
+```
+
 #### 联合封禁系统
 资源保护系统与联合封禁系统集成，可以自动提交违规者信息进行封禁。
 ```lua
