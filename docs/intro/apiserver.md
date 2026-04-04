@@ -237,5 +237,176 @@ TriggerEvent("HGadmin-v3:submitJointBan", {
     steam_account = licenseId   -- License ID
 })
 ```
+#### Kook / Discord 日志系统 (server/webhook.lua)
+
+日志系统支持将服务器事件推送到 **KOOK 频道** 或 **Discord Webhook**，其他资源可以直接通过 exports 调用，方便接入自定义日志。
+
+##### 核心导出函数
+
+###### 1. SendKookLog — 发送日志消息
+
+向配置的 KOOK 频道或 Discord Webhook 发送一条卡片消息日志。
+
+```lua
+-- 函数签名
+exports['hgadmin']:SendKookLog(logType, title, content, extraFields, customTheme)
+```
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `logType` | string | 是 | 日志类型，决定发送到哪个频道（见下方类型表） |
+| `title` | string | 是 | 卡片标题 |
+| `content` | string | 是 | 卡片正文内容，支持 kmarkdown 格式 |
+| `extraFields` | table/nil | 否 | 额外字段列表，格式: `{ {name="字段名", value="值"}, ... }` |
+| `customTheme` | string/nil | 否 | 卡片主题色：`"warning"`(黄) / `"danger"`(红) / `"info"`(蓝) / `"success"`(绿) / `"primary"`(紫) |
+
+**返回值:** `true` 发送成功 / `false` 未发送（未启用或频道未配置）
+
+**调用示例：**
+
+```lua
+-- 简单日志
+exports['hgadmin']:SendKookLog(
+    "Kick",                          -- 日志类型
+    "🚫 玩家被踢出",                  -- 标题
+    "**管理员:** Admin\n**玩家:** Test\n**原因:** 违规行为",  -- 内容 (kmarkdown)
+    nil,                             -- 无额外字段
+    "danger"                         -- 红色主题
+)
+
+-- 带额外字段的日志
+exports['hgadmin']:SendKookLog(
+    "GiveVehicle",
+    "🚗 赠送车辆",
+    "**管理员:** Admin\n**目标玩家:** Player1",
+    {
+        { name = "车辆模型", value = "adder" },
+        { name = "车牌号", value = "HGADMIN" },
+        { name = "车辆类型", value = "超级跑车" }
+    },
+    "success"  -- 绿色主题
+)
+
+-- 自定义日志（使用现有类型路由到对应频道）
+exports['hgadmin']:SendKookLog(
+    "Announcement",
+    "📢 系统公告",
+    "服务器将于 10 分钟后重启维护",
+    nil,
+    "warning"
+)
+```
+
+###### 2. IsKookEnabled — 检查 KOOK 是否启用
+
+```lua
+local enabled = exports['hgadmin']:IsKookEnabled()
+-- 返回 true/false
+```
+
+###### 3. IsKookLogEnabled — 检查指定日志类型是否启用
+
+```lua
+local enabled, channelId = exports['hgadmin']:IsKookLogEnabled("Kick")
+-- enabled: true/false
+-- channelId: KOOK 频道 ID（如果启用）
+```
+
+###### 4. IsDiscordEnabled — 检查 Discord 是否启用
+
+```lua
+local enabled = exports['hgadmin']:IsDiscordEnabled()
+-- 返回 true/false
+```
+
+###### 5. GetLogPlatform — 获取当前日志平台
+
+```lua
+local platform = exports['hgadmin']:GetLogPlatform()
+-- 返回 "kook" / "discord" / "both"
+```
+
+##### 日志类型与频道映射
+
+| 日志类型 (logType) | 频道分组 | 说明 |
+|-------------------|---------|------|
+| `Kick` | AdminActions | 踢出玩家 |
+| `Ban` | AdminActions | 封禁玩家 |
+| `Unban` | AdminActions | 解封玩家 |
+| `Warn` | AdminActions | 警告玩家 |
+| `GiveItem` | AdminActions | 赠送物品 |
+| `GiveMoney` | AdminActions | 赠送金钱 |
+| `GiveVehicle` | AdminActions | 赠送车辆 |
+| `Teleport` | AdminActions | 传送 |
+| `SetJob` | AdminActions | 设置职业 |
+| `SetGang` | AdminActions | 设置帮派 |
+| `ClearInventory` | AdminActions | 清空背包 |
+| `Revive` | AdminActions | 复活 |
+| `Heal` | AdminActions | 治疗 |
+| `Kill` | AdminActions | 击杀 |
+| `Freeze` | AdminActions | 冻结 |
+| `Spectate` | AdminActions | 观察 |
+| `Noclip` | AdminActions | 穿墙 |
+| `GodMode` | AdminActions | 无敌 |
+| `Invisible` | AdminActions | 隐身 |
+| `Weather` | ServerEvents | 天气变更 |
+| `Time` | ServerEvents | 时间变更 |
+| `TimeFreeze` | ServerEvents | 时间冻结 |
+| `Announcement` | ServerEvents | 公告 |
+| `ResourceStart` | ServerEvents | 资源启动 |
+| `ResourceStop` | ServerEvents | 资源停止 |
+| `Join` | PlayerConnect | 玩家加入 |
+| `Leave` | PlayerConnect | 玩家离开 |
+| `JointBanBlock` | PlayerConnect | 联合封禁拦截 |
+| `LocalBan` | BanLogs | 本地封禁 |
+| `LocalUnban` | BanLogs | 本地解封 |
+| `JointBan` | BanLogs | 联合封禁 |
+| `JointBanWhitelist` | BanLogs | 联合封禁白名单 |
+| `AdminScreenshot` | Screenshots | 管理员截图 |
+
+##### 在其他资源中使用示例
+
+```lua
+-- 示例: 在你的脚本中接入 HGAdmin 日志系统
+
+-- 封装一个安全调用函数，防止 hgadmin 未启动时报错
+local function SendLog(logType, title, content, extraFields, customTheme)
+    if GetResourceState('hgadmin') ~= 'started' then return false end
+    local success, result = pcall(function()
+        return exports['hgadmin']:SendKookLog(logType, title, content, extraFields, customTheme)
+    end)
+    if not success then
+        print("[MyScript] Kook 日志发送失败: " .. tostring(result))
+        return false
+    end
+    return result
+end
+
+-- 使用示例: 玩家购买商品时发送日志
+RegisterServerEvent('myshop:itemPurchased')
+AddEventHandler('myshop:itemPurchased', function(itemName, price)
+    local src = source
+    local playerName = GetPlayerName(src)
+    SendLog(
+        "GiveItem",
+        "🛒 商品购买",
+        string.format("**玩家:** %s (ID: %s)\n**商品:** %s\n**价格:** $%d", 
+            playerName, src, itemName, price),
+        {
+            { name = "购买时间", value = os.date("%Y-%m-%d %H:%M:%S") }
+        },
+        "info"
+    )
+end)
+
+-- 使用示例: 检查日志系统状态
+if exports['hgadmin']:IsKookEnabled() then
+    print("KOOK 日志已启用，平台: " .. exports['hgadmin']:GetLogPlatform())
+end
+```
+
+> [!TIP] 提示
+> `content` 参数支持 KOOK 的 kmarkdown 格式，可以使用 `**加粗**`、`~~删除线~~`、`[链接](url)` 等语法。Discord 则使用标准 Markdown 格式。
+
 #### 联系与支持
-如有问题或需要支持，请联系 HG Admin 开发团队。 
+如有问题或需要支持，请联系 HG Admin 开发团队。
