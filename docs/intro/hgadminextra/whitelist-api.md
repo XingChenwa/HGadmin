@@ -342,6 +342,505 @@ print(r.json())
 
 ---
 
+## Node.js 调用示例
+
+### 安装依赖
+
+```bash
+npm install axios
+```
+
+### 基础用法
+
+```javascript
+const axios = require('axios');
+
+const BASE_URL = 'http://你的服务器IP:30120/hgadmin_extra';
+const TOKEN = '你的安全密钥';
+
+const api = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    'Authorization': `Bearer ${TOKEN}`,
+    'Content-Type': 'application/json'
+  },
+  timeout: 10000
+});
+
+// 健康检查
+async function healthCheck() {
+  const { data } = await axios.get(`${BASE_URL}/api/health`);
+  console.log(data);
+}
+
+// 获取待审核列表
+async function getPending() {
+  const { data } = await api.get('/api/whitelist/pending');
+  console.log(data);
+}
+
+// 批准白名单
+async function approve(requestId) {
+  const { data } = await api.post('/api/whitelist/approve', {
+    request_id: requestId
+  });
+  console.log(data);
+}
+
+// 驳回白名单
+async function reject(requestId) {
+  const { data } = await api.post('/api/whitelist/reject', {
+    request_id: requestId
+  });
+  console.log(data);
+}
+
+// 搜索白名单
+async function search(query) {
+  const { data } = await api.get(`/api/whitelist/search?q=${query}`);
+  console.log(data);
+}
+
+// 使用示例
+(async () => {
+  await healthCheck();
+  await getPending();
+  await approve('ABC123');
+})();
+```
+
+---
+
+## C# 调用示例
+
+```csharp
+using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+
+class WhitelistAPI
+{
+    private readonly HttpClient _client;
+    private readonly string _baseUrl;
+
+    public WhitelistAPI(string baseUrl, string token)
+    {
+        _baseUrl = baseUrl.TrimEnd('/');
+        _client = new HttpClient();
+        _client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+        _client.Timeout = TimeSpan.FromSeconds(10);
+    }
+
+    // 健康检查
+    public async Task<JsonElement> HealthCheckAsync()
+    {
+        var response = await _client.GetAsync($"{_baseUrl}/api/health");
+        var json = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<JsonElement>(json);
+    }
+
+    // 获取待审核列表
+    public async Task<JsonElement> GetPendingAsync()
+    {
+        var response = await _client.GetAsync($"{_baseUrl}/api/whitelist/pending");
+        var json = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<JsonElement>(json);
+    }
+
+    // 批准白名单
+    public async Task<JsonElement> ApproveAsync(string requestId)
+    {
+        var content = new StringContent(
+            JsonSerializer.Serialize(new { request_id = requestId }),
+            Encoding.UTF8, "application/json");
+        var response = await _client.PostAsync($"{_baseUrl}/api/whitelist/approve", content);
+        var json = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<JsonElement>(json);
+    }
+
+    // 驳回白名单
+    public async Task<JsonElement> RejectAsync(string requestId)
+    {
+        var content = new StringContent(
+            JsonSerializer.Serialize(new { request_id = requestId }),
+            Encoding.UTF8, "application/json");
+        var response = await _client.PostAsync($"{_baseUrl}/api/whitelist/reject", content);
+        var json = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<JsonElement>(json);
+    }
+
+    // 搜索白名单
+    public async Task<JsonElement> SearchAsync(string query)
+    {
+        var response = await _client.GetAsync($"{_baseUrl}/api/whitelist/search?q={query}");
+        var json = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<JsonElement>(json);
+    }
+}
+
+// 使用示例
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        var api = new WhitelistAPI("http://你的服务器IP:30120/hgadmin_extra", "你的安全密钥");
+
+        var health = await api.HealthCheckAsync();
+        Console.WriteLine(health);
+
+        var pending = await api.GetPendingAsync();
+        Console.WriteLine(pending);
+
+        var result = await api.ApproveAsync("ABC123");
+        Console.WriteLine(result);
+    }
+}
+```
+
+---
+
+## Java 调用示例
+
+```java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
+public class WhitelistAPI {
+    private final String baseUrl;
+    private final String token;
+    private final HttpClient client;
+
+    public WhitelistAPI(String baseUrl, String token) {
+        this.baseUrl = baseUrl.replaceAll("/$", "");
+        this.token = token;
+        this.client = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(10))
+            .build();
+    }
+
+    // GET 请求
+    private String get(String endpoint) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(baseUrl + endpoint))
+            .header("Authorization", "Bearer " + token)
+            .GET()
+            .build();
+        HttpResponse<String> response = client.send(request,
+            HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
+
+    // POST 请求
+    private String post(String endpoint, String jsonBody) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(baseUrl + endpoint))
+            .header("Authorization", "Bearer " + token)
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+            .build();
+        HttpResponse<String> response = client.send(request,
+            HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
+
+    // 健康检查
+    public String healthCheck() throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(baseUrl + "/api/health"))
+            .GET()
+            .build();
+        HttpResponse<String> response = client.send(request,
+            HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
+
+    // 获取待审核列表
+    public String getPending() throws Exception {
+        return get("/api/whitelist/pending");
+    }
+
+    // 批准白名单
+    public String approve(String requestId) throws Exception {
+        return post("/api/whitelist/approve",
+            "{\"request_id\":\"" + requestId + "\"}");
+    }
+
+    // 驳回白名单
+    public String reject(String requestId) throws Exception {
+        return post("/api/whitelist/reject",
+            "{\"request_id\":\"" + requestId + "\"}");
+    }
+
+    // 搜索白名单
+    public String search(String query) throws Exception {
+        return get("/api/whitelist/search?q=" + query);
+    }
+
+    // 使用示例
+    public static void main(String[] args) throws Exception {
+        WhitelistAPI api = new WhitelistAPI(
+            "http://你的服务器IP:30120/hgadmin_extra", "你的安全密钥");
+
+        System.out.println(api.healthCheck());
+        System.out.println(api.getPending());
+        System.out.println(api.approve("ABC123"));
+    }
+}
+```
+
+---
+
+## Rust 调用示例
+
+在 `Cargo.toml` 中添加依赖：
+
+```toml
+[dependencies]
+reqwest = { version = "0.12", features = ["json"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+```
+
+```rust
+use reqwest::Client;
+use serde_json::{json, Value};
+
+struct WhitelistAPI {
+    base_url: String,
+    token: String,
+    client: Client,
+}
+
+impl WhitelistAPI {
+    fn new(base_url: &str, token: &str) -> Self {
+        Self {
+            base_url: base_url.trim_end_matches('/').to_string(),
+            token: token.to_string(),
+            client: Client::new(),
+        }
+    }
+
+    // 健康检查
+    async fn health_check(&self) -> Result<Value, reqwest::Error> {
+        let resp = self.client
+            .get(format!("{}/api/health", self.base_url))
+            .send()
+            .await?
+            .json::<Value>()
+            .await?;
+        Ok(resp)
+    }
+
+    // 获取待审核列表
+    async fn get_pending(&self) -> Result<Value, reqwest::Error> {
+        let resp = self.client
+            .get(format!("{}/api/whitelist/pending", self.base_url))
+            .header("Authorization", format!("Bearer {}", self.token))
+            .send()
+            .await?
+            .json::<Value>()
+            .await?;
+        Ok(resp)
+    }
+
+    // 批准白名单
+    async fn approve(&self, request_id: &str) -> Result<Value, reqwest::Error> {
+        let resp = self.client
+            .post(format!("{}/api/whitelist/approve", self.base_url))
+            .header("Authorization", format!("Bearer {}", self.token))
+            .json(&json!({"request_id": request_id}))
+            .send()
+            .await?
+            .json::<Value>()
+            .await?;
+        Ok(resp)
+    }
+
+    // 驳回白名单
+    async fn reject(&self, request_id: &str) -> Result<Value, reqwest::Error> {
+        let resp = self.client
+            .post(format!("{}/api/whitelist/reject", self.base_url))
+            .header("Authorization", format!("Bearer {}", self.token))
+            .json(&json!({"request_id": request_id}))
+            .send()
+            .await?
+            .json::<Value>()
+            .await?;
+        Ok(resp)
+    }
+
+    // 搜索白名单
+    async fn search(&self, query: &str) -> Result<Value, reqwest::Error> {
+        let resp = self.client
+            .get(format!("{}/api/whitelist/search?q={}", self.base_url, query))
+            .header("Authorization", format!("Bearer {}", self.token))
+            .send()
+            .await?
+            .json::<Value>()
+            .await?;
+        Ok(resp)
+    }
+}
+
+#[tokio::main]
+async fn main() {
+    let api = WhitelistAPI::new(
+        "http://你的服务器IP:30120/hgadmin_extra",
+        "你的安全密钥",
+    );
+
+    match api.health_check().await {
+        Ok(v) => println!("健康检查: {}", v),
+        Err(e) => eprintln!("错误: {}", e),
+    }
+
+    match api.get_pending().await {
+        Ok(v) => println!("待审核: {}", v),
+        Err(e) => eprintln!("错误: {}", e),
+    }
+
+    match api.approve("ABC123").await {
+        Ok(v) => println!("批准结果: {}", v),
+        Err(e) => eprintln!("错误: {}", e),
+    }
+}
+```
+
+---
+
+## C++ 调用示例
+
+使用 [libcurl](https://curl.se/libcurl/) 和 [nlohmann/json](https://github.com/nlohmann/json)：
+
+```cpp
+#include <iostream>
+#include <string>
+#include <curl/curl.h>
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
+
+// libcurl 写回调
+static size_t WriteCallback(void* contents, size_t size, size_t nmemb,
+                            std::string* output) {
+    size_t totalSize = size * nmemb;
+    output->append((char*)contents, totalSize);
+    return totalSize;
+}
+
+class WhitelistAPI {
+private:
+    std::string base_url;
+    std::string token;
+
+    // GET 请求
+    json doGet(const std::string& endpoint) {
+        CURL* curl = curl_easy_init();
+        std::string response;
+        std::string url = base_url + endpoint;
+
+        struct curl_slist* headers = nullptr;
+        std::string auth = "Authorization: Bearer " + token;
+        headers = curl_slist_append(headers, auth.c_str());
+
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+        curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
+
+        curl_easy_perform(curl);
+        curl_slist_free_all(headers);
+        curl_easy_cleanup(curl);
+
+        return json::parse(response);
+    }
+
+    // POST 请求
+    json doPost(const std::string& endpoint, const json& body) {
+        CURL* curl = curl_easy_init();
+        std::string response;
+        std::string url = base_url + endpoint;
+        std::string bodyStr = body.dump();
+
+        struct curl_slist* headers = nullptr;
+        std::string auth = "Authorization: Bearer " + token;
+        headers = curl_slist_append(headers, auth.c_str());
+        headers = curl_slist_append(headers, "Content-Type: application/json");
+
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, bodyStr.c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+        curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
+
+        curl_easy_perform(curl);
+        curl_slist_free_all(headers);
+        curl_easy_cleanup(curl);
+
+        return json::parse(response);
+    }
+
+public:
+    WhitelistAPI(const std::string& url, const std::string& tok)
+        : base_url(url), token(tok) {
+        curl_global_init(CURL_GLOBAL_DEFAULT);
+    }
+
+    ~WhitelistAPI() {
+        curl_global_cleanup();
+    }
+
+    // 健康检查
+    json healthCheck() {
+        return doGet("/api/health");
+    }
+
+    // 获取待审核列表
+    json getPending() {
+        return doGet("/api/whitelist/pending");
+    }
+
+    // 批准白名单
+    json approve(const std::string& requestId) {
+        return doPost("/api/whitelist/approve",
+                      {{"request_id", requestId}});
+    }
+
+    // 驳回白名单
+    json reject(const std::string& requestId) {
+        return doPost("/api/whitelist/reject",
+                      {{"request_id", requestId}});
+    }
+
+    // 搜索白名单
+    json search(const std::string& query) {
+        return doGet("/api/whitelist/search?q=" + query);
+    }
+};
+
+int main() {
+    WhitelistAPI api("http://你的服务器IP:30120/hgadmin_extra", "你的安全密钥");
+
+    std::cout << "健康检查: " << api.healthCheck().dump(2) << std::endl;
+    std::cout << "待审核: " << api.getPending().dump(2) << std::endl;
+    std::cout << "批准: " << api.approve("ABC123").dump(2) << std::endl;
+
+    return 0;
+}
+```
+
+---
+
 ## Lua Exports（插件内部调用）
 
 除了 HTTP API，白名单系统也支持在其他 FiveM 资源中通过 exports 调用：
